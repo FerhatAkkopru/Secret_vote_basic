@@ -1,0 +1,35 @@
+{
+  "name": "zkp_mina",
+  "version": "1.0.0",
+  "description": "Zero-Knowledge Proof tabanlı anonim oylama sistemi - Mina Protocol ve SnarkyJS ile geliştirilmiştir",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --detectOpenHandles --runInBand",
+    "start": "streamlit run voting_ui.py"
+  },
+  "keywords": [
+    "zkp",
+    "zero-knowledge-proof",
+    "voting",
+    "mina-protocol",
+    "snarkyjs",
+    "blockchain",
+    "anonymous",
+    "privacy"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "reflect-metadata": "^0.2.2",
+    "snarkyjs": "^0.12.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.1.3",
+    "ts-jest": "^29.4.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
