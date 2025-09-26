@@ -231,10 +231,6 @@ streamlit run voting_ui.py
 4. Push yapın (`git push origin feature/amazing-feature`)
 5. Pull Request oluşturun
 
-## 📄 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakın.
-
 ## 🆘 Sorun Giderme
 
 ### Yaygın Sorunlar
