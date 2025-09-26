@@ -109,3 +109,6 @@ venv.bak/
 
 # Streamlit
 .streamlit/
+
+# Kişi verileri listesi (güvenlik için)
+people_data.json

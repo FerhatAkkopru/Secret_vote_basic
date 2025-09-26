@@ -26,10 +26,10 @@ export class Voting extends SmartContract {
 
   @method vote(
     choice: Field,
-    nameHash: Field,      // İsim hash'i (gizli)
-    surnameHash: Field,   // Soyisim hash'i (gizli)
-    ageHash: Field,       // Yaş hash'i (gizli)
-    ageProof: Field       // Yaş >= 18 kanıtı (gizli)
+    personHash: Field,    // TC+isim+soyisim+yaş hash'i (gizli)
+    ageProof: Field,      // Yaş >= 18 kanıtı (gizli)
+    personProof: Field,   // Kişi verileri geçerli listesinde kanıtı (gizli)
+    voteProof: Field      // Daha önce oy vermemiş kanıtı (gizli)
   ) {
     const red = this.red.get();
     const blue = this.blue.get();
@@ -45,6 +45,14 @@ export class Voting extends SmartContract {
     // Yaş kontrolü - sadece 18+ olduğunu kanıtla
     const isValidAgeProof = ageProof.equals(Field(1));
     Provable.if(isValidAgeProof, Bool(true), Bool(false)).assertTrue('Yaş 18\'den küçük olamaz');
+
+    // Kişi verileri kontrolü - geçerli kişi listesinde olduğunu kanıtla
+    const isValidPersonProof = personProof.equals(Field(1));
+    Provable.if(isValidPersonProof, Bool(true), Bool(false)).assertTrue('Geçersiz kişi verileri');
+
+    // Çifte oy kontrolü - daha önce oy vermemiş olduğunu kanıtla
+    const isValidVoteProof = voteProof.equals(Field(1));
+    Provable.if(isValidVoteProof, Bool(true), Bool(false)).assertTrue('Bu TC kimlik numarası daha önce oy vermiş');
 
     // Seçim 0, 1 veya 2 olmalı
     const isValidChoice = choice.greaterThanOrEqual(Field(0)).and(choice.lessThanOrEqual(Field(2)));
@@ -66,6 +74,6 @@ export class Voting extends SmartContract {
     this.green.set(nextGreen);
     this.totalVoters.set(nextTotalVoters);
 
-    // Kimlik bilgileri gizli kalır, sadece yaş kanıtı ve seçim açık
+    // Kimlik bilgileri gizli kalır, sadece yaş kanıtı, kişi kanıtı, oy kanıtı ve seçim açık
   }
 }

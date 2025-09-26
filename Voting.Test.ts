@@ -50,10 +50,10 @@ describe('Voting zkApp integration test', () => {
     let txn = await Mina.transaction(feePayer, async () => {
       await zkAppInstance.vote(
         Field(0),           // kırmızı
-        Field(12345),       // isim hash
-        Field(67890),       // soyisim hash
-        Field(99999),       // yaş hash
-        Field(1)            // yaş kanıtı
+        Field(12345),       // person hash (TC+isim+soyisim+yaş)
+        Field(1),           // yaş kanıtı
+        Field(1),           // person kanıtı
+        Field(1)            // oy kanıtı
       );
     });
     await txn.prove();
@@ -69,10 +69,10 @@ describe('Voting zkApp integration test', () => {
     let txn = await Mina.transaction(feePayer, async () => {
       await zkAppInstance.vote(
         Field(1),           // mavi
-        Field(54321),       // isim hash
-        Field(98765),       // soyisim hash
-        Field(88888),       // yaş hash
-        Field(1)            // yaş kanıtı
+        Field(54321),       // person hash (TC+isim+soyisim+yaş)
+        Field(1),           // yaş kanıtı
+        Field(1),           // person kanıtı
+        Field(1)            // oy kanıtı
       );
     });
     await txn.prove();
@@ -89,10 +89,10 @@ describe('Voting zkApp integration test', () => {
     let txn = await Mina.transaction(feePayer, async () => {
       await zkAppInstance.vote(
         Field(2),           // yeşil
-        Field(55555),       // isim hash
-        Field(66666),       // soyisim hash
-        Field(77777),       // yaş hash
-        Field(1)            // yaş kanıtı
+        Field(55555),       // person hash (TC+isim+soyisim+yaş)
+        Field(1),           // yaş kanıtı
+        Field(1),           // person kanıtı
+        Field(1)            // oy kanıtı
       );
     });
     await txn.prove();
@@ -102,5 +102,25 @@ describe('Voting zkApp integration test', () => {
     await zkAppInstance.totalVoters.fetch();
     expect(zkAppInstance.green.get()).toEqual(Field(1));
     expect(zkAppInstance.totalVoters.get()).toEqual(Field(3));
+  });
+
+  it('Kişi verileri kontrolü çalışmalı', async () => {
+    // Geçerli kişi verileri ile oy verme (güvenli hash ile)
+    let txn = await Mina.transaction(feePayer, async () => {
+      await zkAppInstance.vote(
+        Field(0),           // kırmızı
+        Field(44444),       // person hash (TC+isim+soyisim+yaş)
+        Field(1),           // yaş kanıtı
+        Field(1),           // person kanıtı (geçerli)
+        Field(1)            // oy kanıtı (daha önce oy vermemiş)
+      );
+    });
+    await txn.prove();
+    await txn.sign([feePayer]).send();
+
+    await zkAppInstance.red.fetch();
+    await zkAppInstance.totalVoters.fetch();
+    expect(zkAppInstance.red.get()).toEqual(Field(2));
+    expect(zkAppInstance.totalVoters.get()).toEqual(Field(4));
   });
 });

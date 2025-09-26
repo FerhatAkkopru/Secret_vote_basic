@@ -1,0 +1,11 @@
+{
+  "voted_hashes": [
+    "b9ac6cc3f5910b68ded29b32c033b58b7882d6caaa8f3da0f2bb049c24c0e36e",
+    "e7b59f03ee35cdaa7d9f6baa8fe3f8d2d150403c60dd99e525c4930da9c8d228",
+    "bd8083fc1e6ac1fec4e11e597c30222a3d273b374659b02a9360460aebff1c6a"
+  ],
+  "description": "Oy vermi\u015f TC kimlik numaralar\u0131n\u0131n hash'leri (salt+pepper ile)",
+  "salt": "zkp_voting_salt_2024",
+  "algorithm": "SHA-256",
+  "note": "Pepper de\u011feri .env dosyas\u0131nda saklan\u0131r ve GitHub'a y\u00fcklenmez"
+}
