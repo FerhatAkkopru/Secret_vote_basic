@@ -11,16 +11,12 @@ SALT = os.getenv('SALT', 'zkp_voting_salt_2024')
 PEPPER = os.getenv('PEPPER', 'mina_protocol_pepper')
 
 def hash_id(tc_id):
-    """
-    TC kimlik numarasını salt + pepper ile SHA-256 hash'ler
-    """
+    # TC kimlik numarasını hash'liyorum
     combined = SALT + tc_id + PEPPER
     return hashlib.sha256(combined.encode()).hexdigest()
 
 def load_voted_tc_list():
-    """
-    Oy vermiş TC kimlik numaralarını yükler
-    """
+    # Oy vermiş TC kimlik numaralarını yüklüyorum
     try:
         with open('voted_tc_hashes.json', 'r') as f:
             data = json.load(f)
@@ -29,9 +25,7 @@ def load_voted_tc_list():
         return []
 
 def save_voted_tc_list(voted_hashes):
-    """
-    Oy vermiş TC kimlik numaralarını kaydeder
-    """
+    # Oy vermiş TC kimlik numaralarını kaydediyorum
     data = {
         "voted_hashes": voted_hashes,
         "description": "Oy vermiş TC kimlik numaralarının hash'leri (salt+pepper ile)",
@@ -44,17 +38,13 @@ def save_voted_tc_list(voted_hashes):
         json.dump(data, f, indent=2)
 
 def has_voted(tc_id):
-    """
-    Bu TC kimlik numarasının daha önce oy verip vermediğini kontrol eder
-    """
+    # Bu TC kimlik numarası daha önce oy vermiş mi kontrol ediyorum
     tc_hash = hash_id(tc_id)
     voted_hashes = load_voted_tc_list()
     return tc_hash in voted_hashes
 
 def mark_as_voted(tc_id):
-    """
-    Bu TC kimlik numarasını oy vermiş olarak işaretler
-    """
+    # Bu TC kimlik numarasını oy vermiş olarak işaretliyorum
     tc_hash = hash_id(tc_id)
     voted_hashes = load_voted_tc_list()
     
@@ -65,16 +55,12 @@ def mark_as_voted(tc_id):
     return False
 
 def get_vote_proof(tc_id):
-    """
-    Bu TC kimlik numarasının oy verme yetkisi olup olmadığını kontrol eder
-    Returns: 1 if can vote, 0 if already voted
-    """
+    # Oy verme yetkisi proof'u döndürüyorum
+    # 1 = oy verebilir, 0 = daha önce oy vermiş
     return 0 if has_voted(tc_id) else 1
 
 def reset_votes():
-    """
-    Tüm oy kayıtlarını sıfırlar (test amaçlı)
-    """
+    # Tüm oy kayıtlarını sıfırlıyorum (test için)
     save_voted_tc_list([])
     print("✅ Tüm oy kayıtları sıfırlandı")
 

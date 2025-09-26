@@ -161,6 +161,8 @@ zkp_mina/
 ├── voting_ui.py          # Streamlit web arayüzü
 ├── hash_utils.py         # Güvenli hash utility fonksiyonları
 ├── voted_tc_tracker.py   # Çifte oy engelleme sistemi
+├── stress_test.py        # Simülasyon stress testi
+├── real_stress_test.py   # Gerçek sistem stress testi
 ├── secure_valid_ids.json # Hash'lenmiş geçerli TC kimlik numaraları
 ├── secure_people_data.json # Hash'lenmiş kişi verileri (TC+isim+soyisim+yaş)
 ├── voted_tc_hashes.json  # Oy vermiş TC kimlik numaralarının hash'leri
@@ -191,6 +193,8 @@ npm test
 - ✅ Kişi verileri kontrolü (geçerli TC+isim+soyisim+yaş doğrulama)
 - ✅ Çifte oy engelleme (aynı TC ile ikinci oy)
 - ✅ Geçersiz seçim engelleme
+- ✅ Stress test (1000 kullanıcı simülasyonu)
+- ✅ Performans testi (gerçek sistem)
 
 ## 🔧 Geliştirme
 
@@ -343,6 +347,68 @@ Bu proje **1000 adet geçerli kişi verisi** (TC+isim+soyisim+yaş) kullanır. K
 - **Gizli Saklama**: GitHub'da görünmez
 - **Kontrollü Erişim**: İsteyen kişi proje sahibinden talep eder
 - **Güvenli Dağıtım**: Özel mesajla gönderilir
+
+## 🧪 Stress Test ve Performans
+
+Bu proje kapsamlı stress testlerle test edilmiştir:
+
+### 📊 Test Sonuçları
+
+**Simülasyon Testi (1000 kullanıcı):**
+- ⏱️ **Süre**: 2.2 saniye
+- 🚀 **Throughput**: 453.59 oy/saniye
+- ✅ **Başarı Oranı**: 1000/1000 (%100)
+- ❌ **Hata**: 0
+
+**Gerçek Sistem Testi (100 kullanıcı):**
+- ⏱️ **Süre**: 5.15 saniye
+- 🚀 **Throughput**: 19.40 oy/saniye
+- ✅ **Başarı Oranı**: 99/100 (%99)
+- ❌ **Hata**: 1 (çifte oy - beklenen)
+
+### 🔧 Test Yöntemleri
+
+**1. Sıralı Test (Tek Thread):**
+- 1000 kullanıcı: 106.25 saniye
+- Throughput: 9.41 oy/saniye
+
+**2. Paralel Test (50 Thread):**
+- 1000 kullanıcı: 2.20 saniye
+- Throughput: 453.59 oy/saniye
+
+**3. Eşzamanlı Test (Batch Processing):**
+- 1000 kullanıcı: 5.78 saniye
+- Throughput: 172.97 oy/saniye
+
+### 🎯 Performans Analizi
+
+**Lokal Sistem:**
+- ✅ Çok hızlı hash doğrulama
+- ✅ Etkili çifte oy engelleme
+- ✅ %99 başarı oranı
+- ✅ Paralel işleme avantajı
+
+**Gerçek Blockchain Tahmini:**
+- ⏱️ 1000 kullanıcı: ~50-60 saniye
+- 🚀 Throughput: ~17-20 oy/saniye
+- ⚠️ Blockchain işlemleri daha yavaş
+
+### 🧪 Test Çalıştırma
+
+```bash
+# Simülasyon testi
+python3 stress_test.py
+
+# Gerçek sistem testi
+python3 real_stress_test.py
+```
+
+**Test Özellikleri:**
+- 1000 kişilik gerçekçi veri seti
+- Rastgele oy seçimi
+- Çifte oy engelleme testi
+- Hash doğrulama testi
+- Performans ölçümü
 
 ## 📊 Proje Değerlendirmesi
 

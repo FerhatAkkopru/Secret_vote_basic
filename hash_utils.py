@@ -11,25 +11,19 @@ SALT = os.getenv('SALT', 'zkp_voting_salt_2024')  # Varsayılan değer
 PEPPER = os.getenv('PEPPER', 'mina_protocol_pepper')  # Varsayılan değer
 
 def hash_id(tc_id):
-    """
-    TC kimlik numarasını salt + pepper ile SHA-256 hash'ler
-    """
+    # TC kimlik numarasını güvenli şekilde hash'liyorum
     # Salt + TC ID + Pepper kombinasyonu
     combined = SALT + tc_id + PEPPER
     return hashlib.sha256(combined.encode()).hexdigest()
 
 def hash_person_data(tc_id, first_name, last_name, age):
-    """
-    TC kimlik numarası + isim + soyisim + yaş bilgilerini salt + pepper ile SHA-256 hash'ler
-    """
+    # Kişi verilerini birlikte hash'liyorum - daha güvenli
     # Salt + TC ID + First Name + Last Name + Age + Pepper kombinasyonu
     combined = SALT + tc_id + first_name + last_name + str(age) + PEPPER
     return hashlib.sha256(combined.encode()).hexdigest()
 
 def create_hashed_id_list():
-    """
-    Geçerli TC kimlik numaralarını hash'leyerek güvenli liste oluşturur
-    """
+    # TC kimlik numaralarını hash'leyip güvenli liste oluşturuyorum
     # TC kimlik numaralarını people_data.json dosyasından oku
     try:
         with open('people_data.json', 'r', encoding='utf-8') as f:
@@ -59,9 +53,7 @@ def create_hashed_id_list():
     }
 
 def create_hashed_people_list():
-    """
-    Kişi verilerini hash'leyerek güvenli liste oluşturur
-    """
+    # Kişi verilerini hash'leyip güvenli liste oluşturuyorum
     # Kişi verilerini dosyadan oku
     try:
         with open('people_data.json', 'r', encoding='utf-8') as f:
@@ -89,9 +81,7 @@ def create_hashed_people_list():
     }
 
 def is_valid_id(tc_id):
-    """
-    Verilen TC kimlik numarasının geçerli olup olmadığını kontrol eder
-    """
+    # TC kimlik numarasının geçerli olup olmadığını kontrol ediyorum
     try:
         with open('secure_valid_ids.json', 'r') as f:
             data = json.load(f)
@@ -106,9 +96,7 @@ def is_valid_id(tc_id):
         return False
 
 def is_valid_person(tc_id, first_name, last_name, age):
-    """
-    Verilen kişi verilerinin geçerli olup olmadığını kontrol eder
-    """
+    # Kişi verilerinin geçerli olup olmadığını kontrol ediyorum
     try:
         with open('secure_people_data.json', 'r') as f:
             data = json.load(f)
